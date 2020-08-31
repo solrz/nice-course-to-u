@@ -21,7 +21,8 @@ const course = new Vuex.Store({
             timeslot: 'ABCDEFGHIJK'.split(''),
             allowCrash: true,
             showOnlySelected: true,
-            showAttr: {"teacher":false,}
+            showAttr: {"teacher":false,},
+            previewCourse:null
         }
     },
     getters:{

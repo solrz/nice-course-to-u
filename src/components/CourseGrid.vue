@@ -1,26 +1,61 @@
 <template>
   <el-card>
     <el-tag
-        :key="course.id + d"
         v-for="course in coursesInGrid"
         closable
+        effect="dark"
+        :type="selectTypeKey(course)"
+        :size="courseSize"
+        :key="course.desc + d"
         :disable-transitions="false"
-        @close="deleteCourse(course)">{{ course.cname }}</el-tag>
+        @close="deleteCourse(course)">{{ course.cname }}
+    </el-tag>
     <el-autocomplete
+        type="textarea"
+        :autosize="true"
         class="input-new-tag"
-        size="small"
         v-if="showCourseInput"
+        v-show="courseFilterOption.allowCrash || coursesInGrid.length === 0"
         ref="saveTagInput"
         v-model="inputValue"
         value-key="cname"
+        size="mini"
         :fetch-suggestions="queryCourses"
         @select="onCourseSelected"
-        @blur="inputVisible=false;inputValue=''"></el-autocomplete>
+        @blur="inputVisible=false;inputValue=''">
+      <i
+          class="el-icon-edit el-input__icon"
+          slot="suffix">
+      </i>
+      <template
+          class="popover-course" slot-scope="{ item }">
+        <el-popover
+            placement="left-start"
+            trigger="hover">
+          <el-tag
+              effect="dark"
+              :type="selectTypeKey(item)"
+              :size="courseSize"
+              :disable-transitions="true"
+              @show="courseFilterOption.previewCourse = item"
+              slot="reference">{{ item.cname }}
+          </el-tag>
+          <div class="addr">{{ item.dep_cname }}</div>
+          <div class="addr">{{ item.teacher }}</div>
+          <div class="addr">{{ item.type }}</div>
+          <div class="addr">{{ item.credit }} 學分</div>
+          <div class="addr">{{ item.rawTimeslot }}</div>
+          <div class="addr">{{ item.reg_num }} /{{ item.num_limit }}</div>
+        </el-popover>
+      </template>
+    </el-autocomplete>
     <el-button
         v-else
+        v-show="courseFilterOption.allowCrash || coursesInGrid.length === 0"
         class="button-new-tag"
-        size="small"
-        @click="showInput">+ New Tag</el-button>
+        size="mini"
+        @click="showInput">+
+    </el-button>
 
   </el-card>
 </template>
@@ -40,8 +75,11 @@ export default {
   },
   computed: {
     coursesInGrid() {
-      return this.scope.row[this.d]
-    }
+      return this.scope.row[this.d].filter((e) => (e !== null))
+    },
+    courseSize() {
+      return this.courseFilterOption.allowCrash ? "mini" : "large"
+    },
   },
   methods: {
     addCourse(course) {
@@ -87,25 +125,36 @@ export default {
       }
       handler(results)
     },
+    selectTypeKey(course) {
+      if(!course) return '';
+      return {
+        '必修': 'warning',
+        '選修': '',
+        '通識': 'danger',
+      }[course.type]
+    },
   }
 }
 </script>
 <style>
+.popover-course{
+  width: 300px
+}
+
 .el-tag + .el-tag {
-  margin-left: 10px;
+  margin-left: 0px;
 }
 
-.button-new-tag {
+.button-new-tag{
   margin-left: 10px;
-  height: 32px;
-  line-height: 30px;
-  padding-top: 0;
-  padding-bottom: 0;
+  height: 20px;
+  line-height: 0px;
 }
 
-.input-new-tag {
-  width: 90px;
+.input-new-tag{
+  font-size: 8px;
   margin-left: 10px;
   vertical-align: bottom;
+  width: 100%;
 }
 </style>

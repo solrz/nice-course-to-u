@@ -73,5 +73,6 @@ course-timetable {
 .progress {
   position: absolute;
   top: 0;
+  text-align-all: center;
 }
 </style>

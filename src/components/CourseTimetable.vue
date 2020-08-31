@@ -4,10 +4,10 @@
       style="width: 100%">
     <el-table-column
         type="index"
-        :index="(index) => $store.state.timetableOptions.timeslot[index]">
+        :index="(index) => courseFilterOption.timeslot[index]">
     </el-table-column>
     <el-table-column
-        v-for="d of $store.state.timetableOptions.weekday"
+        v-for="d of courseFilterOption.weekday"
         :key="d"
         :label="d"
         :prop="d">
@@ -25,19 +25,33 @@ import CourseGrid from "@/components/CourseGrid";
 export default {
   name: 'course-timetable',
   components: {CourseGrid},
-  props: ['courses'],
   computed: {
     coursesForTable() {
       let coursesSlot = this.$store.getters.courseGroup.scheduleSlots
-      let days = '12345'.split('')
-      let slots = 'ABCDEFGHIJK'.split('')
+      let days = this.courseFilterOption.weekday
+      let slots = this.courseFilterOption.timeslot
       let convertedCourses = []
       for (let s of slots) {
         let slotCourses = {}
         for (let d of days) {
-          slotCourses[d] = coursesSlot[d + s]
+          // console.log(d+s)
+          slotCourses[d] = coursesSlot[d + s].slice()
         }
         convertedCourses.push(slotCourses)
+      }
+
+      let preview = this.courseFilterOption.previewCourse
+      if(preview){
+        if(!this.coursesGroup.list.includes(preview)){
+          for(let s of preview.timeSchedules){
+            let d = s[0]
+            let slot = this.courseFilterOption.timeslot.indexOf(s[1])
+            let row = convertedCourses[slot]
+            if(row){
+              row[d].push(this.courseFilterOption.previewCourse)
+            }
+          }
+        }
       }
       return convertedCourses
     }

@@ -96,8 +96,8 @@ export function newEmptyCourse() {
 }
 
 export function newCourseSlots(generator) {
-    const weekdays = [1, 2, 3, 4, 5]
-    const time = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K',]
+    const weekdays = '1234567'.split('')
+    const time = 'MNABCDEXEFGHYIJKL'.split('')
     var courseSlots = {}
     for (const d of weekdays) {
         for (const t of time) {
