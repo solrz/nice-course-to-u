@@ -1,17 +1,17 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <course-tutor-main/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import CourseTutorMain from "@/components/CourseTutorMain";
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    CourseTutorMain
+  },
+  created() {
+    this.$store.commit('loadCourses')
   }
 }
 </script>
