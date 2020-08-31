@@ -4,6 +4,7 @@
 
 <script>
 import CourseTutorMain from "@/components/CourseTutorMain";
+import {getUrlVars} from "@/ezRouter";
 
 export default {
   name: 'App',
@@ -12,7 +13,16 @@ export default {
   },
   created() {
     this.$store.commit('loadCourses')
-    console.log(window.location.href)
+    let params = getUrlVars()
+    console.log(params)
+    if(params['importedCoursesID']){
+      this.$store.commit('loadSharedCourses', params['importedCoursesID'])
+    }
+    this.$notify({
+      title: '成功',
+      message: JSON.stringify(params),
+      type: 'success'
+    });
   }
 }
 </script>

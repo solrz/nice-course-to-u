@@ -49,9 +49,19 @@ const course = new Vuex.Store({
                 // return
             }
             if (forceReload || !allCourses) {
+                this._vm.$notify({
+                    title: '從遠端載入所有課程',
+                    message: '這可能需要10秒',
+                    type: 'info'
+                });
                 allCourses = await remoteGetCourses()
                 console.log(allCourses)
                 localStorage.setItem('allCourses', JSON.stringify(allCourses))
+                this._vm.$notify({
+                    title: '成功載入遠端課程',
+                    message: '下次可以直接使用了',
+                    type: 'success'
+                });
             } else {
                 console.log(allCourses)
                 console.log("Loaded courses from local")
@@ -64,6 +74,29 @@ const course = new Vuex.Store({
             group.addCourse(course)
             state.courseGroups[state.usingCourse] = group
             console.log(group)
+        },
+        async loadSharedCourses(state, rawCoursesID){
+            let forceReload = false
+            let coursesID = rawCoursesID.replace(' ','').split(',')
+            try {
+                var allCourses =
+                    JSON.parse(localStorage.getItem('allCourses'))
+            } catch (e) {
+                console.log(e)
+                // return
+            }
+            if (forceReload || !allCourses) {
+                allCourses = await remoteGetCourses()
+            }
+            let importCourseGroup = 'imported'
+            state.allCourses = allCourses
+            state.usingCourse = importCourseGroup
+            if(!state.courseGroups[importCourseGroup]){
+                state.courseGroups[importCourseGroup] = defaultCourses()
+            }
+            for(let id of coursesID){
+                state.courseGroups[importCourseGroup].addCourse(allCourses[id])
+            }
         }
     }
 })
