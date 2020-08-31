@@ -7,14 +7,15 @@
       style="width: 100%"
       @cell-mouse-enter="hoverOnCourse"
       @mouseleave="leaveCourse"
+      @row-click="clickCourse"
       size="mini">
     <el-table-column
-        prop="cname"
-        label="課名"
+        prop="desc"
+        label="課程"
     >
       <template slot-scope="scope">
         <div>
-          {{ scope.row.cname }}
+          <h3>{{ scope.row.cname }}</h3>
           <el-tag
               :type="selectTypeKey[scope.row.type]"
               size="mini"
@@ -88,6 +89,11 @@ export default {
       }
       // console.log(Object.keys(course), Object.values(course));
       return displayCourse
+    },
+    clickCourse(course){
+      console.log("Clicked course:", course.cname)
+      this.courseFilterOption.courseDetail.showDetail = true
+      this.courseFilterOption.courseDetail.showCourse = course
     }
   }
 }

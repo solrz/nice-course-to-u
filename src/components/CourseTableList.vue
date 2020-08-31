@@ -2,15 +2,17 @@
   <div>
     <course-filter-options :search-string="searchString"/>
     <course-table-list-main :select-type-key="selectTypeKey"/>
+    <course-detail-drawer/>
   </div>
 </template>
 <script>
 import CourseFilterOptions from "@/components/CourseFilterOptions";
 import CourseTableListMain from "@/components/CourseTableListMain";
+import CourseDetailDrawer from "@/components/CourseDetailDrawer";
 
 export default {
   name: 'course-table-list',
-  components: {CourseTableListMain, CourseFilterOptions},
+  components: {CourseDetailDrawer, CourseTableListMain, CourseFilterOptions},
   data() {
     return {
       searchString: ''

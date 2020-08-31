@@ -4,15 +4,14 @@
         v-for="course in coursesInGrid"
         closable
         effect="dark"
+        :style="{opacity: course.isPreview ? 0.4: 1.0}"
         :type="selectTypeKey(course)"
         :size="courseSize"
         :key="course.desc + d"
-        :disable-transitions="false"
+        :disable-transitions="true"
         @close="deleteCourse(course)">{{ course.cname }}
     </el-tag>
     <el-autocomplete
-        type="textarea"
-        :autosize="true"
         class="input-new-tag"
         v-if="showCourseInput"
         v-show="courseFilterOption.allowCrash || coursesInGrid.length === 0"
@@ -31,13 +30,13 @@
           class="popover-course" slot-scope="{ item }">
         <el-popover
             placement="left-start"
-            trigger="hover">
+            trigger="hover"
+            @mouseover.native="courseFilterOption.previewCourse = item">
           <el-tag
               effect="dark"
               :type="selectTypeKey(item)"
               :size="courseSize"
               :disable-transitions="true"
-              @show="courseFilterOption.previewCourse = item"
               slot="reference">{{ item.cname }}
           </el-tag>
           <div class="addr">{{ item.dep_cname }}</div>
