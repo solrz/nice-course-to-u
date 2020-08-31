@@ -78,7 +78,8 @@ export default {
         'dep_cname': '系所: ',
         'memo': '',
         'reg_num': '登記人數: ',
-        'time': '時段: '
+        'time': '時段: ',
+        'id': '課號: '
       }
       let displayCourse = []
       for(let attr in showAttr){
