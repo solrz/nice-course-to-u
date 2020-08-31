@@ -144,7 +144,7 @@ export async function remoteGetCourses() {
                 fetchList = Object.values(departureDetail[fetch])
                 let courses = courseAttrMapping(fetchList)
                 for (let c of courses) {
-                    newAllCourses[c.code] = c
+                    newAllCourses[c.id] = c
                 }
             }
         }
