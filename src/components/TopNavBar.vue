@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row type="flex" class="row-bg" justify="space-between">
-      <el-button icon="el-icon-user-solid" circle/>
+      <el-button icon="el-icon-user-solid" circle> {{this.$store.state.usingCourse}}</el-button>
       <div>
         <el-button icon="el-icon-bell" circle/>
         <el-button icon="el-icon-user-solid" @click="showLogin" circle/>
