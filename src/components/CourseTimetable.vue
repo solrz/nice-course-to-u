@@ -43,12 +43,14 @@ export default {
       let preview = this.courseFilterOption.previewCourse
       if(preview){
         if(!this.coursesGroup.list.includes(preview)){
+          preview = Object.assign({}, preview)
+          preview.isPreview = true
           for(let s of preview.timeSchedules){
             let d = s[0]
             let slot = this.courseFilterOption.timeslot.indexOf(s[1])
             let row = convertedCourses[slot]
             if(row){
-              row[d].push(this.courseFilterOption.previewCourse)
+              row[d].push(preview)
             }
           }
         }

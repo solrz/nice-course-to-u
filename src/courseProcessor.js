@@ -39,6 +39,9 @@ export function courseAttrMapping(cf) {
         if (v.time) {
             let splitInfo = v.time.split('-')
             v.rawTimeslot = splitInfo[0]
+            if(splitInfo.length > 1){
+                v.location = splitInfo[1]
+            }
             let ts = splitInfo[0]
             for (const num of "0123456789") {
                 ts = ts.replace(num, '*' + num)
@@ -56,6 +59,7 @@ export function courseAttrMapping(cf) {
             v.rawTimeslot = ''
             v.timeSchedules = []
         }
+        v.depType = {U:'大學部課程', D:'研究所課程'}[v.depType]
         v.credit = parseInt(v.credit) ? parseInt(v.credit) : 0
         v.desc = `[${v.type}]${v.cname} - ${v.teacher}:${v.dep_cname}`
         cs.push(v)
@@ -138,16 +142,15 @@ export async function remoteGetCourses() {
         for (var fetch of [1, 2]) {
             if (departureDetail[fetch]) {
                 fetchList = Object.values(departureDetail[fetch])
-                // console.log("Adding length", fetchList.length)
                 let courses = courseAttrMapping(fetchList)
                 for (let c of courses) {
                     newAllCourses[c.code] = c
                 }
-                // console.log("New length", Object.keys(newAllCourses).length)
             }
         }
+        // console.log(newAllCourses)
+        // console.log(Object.values(newAllCourses).length)
     }
-    // this.allCourses = newAllCourses
     console.log("Loaded courses", Object.keys(newAllCourses).length, newAllCourses)
     return newAllCourses
 }
