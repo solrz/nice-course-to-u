@@ -1,6 +1,8 @@
 <template>
   <el-container>
-    <el-header>top-bar</el-header>
+    <el-header>
+      <top-nav-bar></top-nav-bar>
+    </el-header>
     <el-container>
       <el-aside width="30%">
         <el-container>
@@ -23,10 +25,11 @@
 import CourseTimetable from "@/components/CourseTimetable";
 import CourseTableList from "@/components/CourseTableList";
 import Dashboard from "@/components/Dashboard";
+import TopNavBar from "@/components/TopNavBar";
 
 export default {
   name: "CourseTutorMain",
-  components: {Dashboard, CourseTableList, CourseTimetable}
+  components: {TopNavBar, Dashboard, CourseTableList, CourseTimetable}
 }
 </script>
 

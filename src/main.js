@@ -27,6 +27,9 @@ const course = new Vuex.Store({
                 showDetail: false,
                 showCourse: null
             }
+        },
+        user: {
+            loginInfo: {showLoginDrawer: false}
         }
     },
     getters: {
@@ -54,7 +57,7 @@ const course = new Vuex.Store({
                 console.log("Loaded courses from local")
             }
             state.allCourses = allCourses
-            console.log(state.allCourses)
+            console.log(Object.keys(state.allCourses))
         },
         addCourses(state, course) {
             let group = state.courseGroups[state.usingCourse]

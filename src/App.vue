@@ -12,6 +12,7 @@ export default {
   },
   created() {
     this.$store.commit('loadCourses')
+    console.log(window.location.href)
   }
 }
 </script>

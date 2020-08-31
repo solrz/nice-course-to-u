@@ -37,7 +37,8 @@
               :type="selectTypeKey(item)"
               :size="courseSize"
               :disable-transitions="true"
-              slot="reference">{{ item.cname }}
+              slot="reference"
+              @click.native="clickCourse(item)">{{ item.cname }}
           </el-tag>
           <div class="addr">{{ item.dep_cname }}</div>
           <div class="addr">{{ item.teacher }}</div>
@@ -132,6 +133,11 @@ export default {
         '通識': 'danger',
       }[course.type]
     },
+    clickCourse(course){
+      console.log("Clicked course:", course.cname)
+      this.courseFilterOption.courseDetail.showDetail = true
+      this.courseFilterOption.courseDetail.showCourse = course
+    }
   }
 }
 </script>

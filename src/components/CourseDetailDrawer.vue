@@ -1,40 +1,45 @@
 <template>
   <el-drawer
       class="drawer"
-      direction="btt"
-      :title="detailedCourse.cname"
+      direction="rtl"
+      type="primary"
+      @open="getCourseDetail"
       :visible.sync="courseFilterOption.courseDetail.showDetail">
-    <el-card>
-      <el-tag
-          :type="selectTypeKey[detailedCourse.type]"
-          size="mini"
-          effect="dark"
-          disable-transitions
-          v-show="detailedCourse.credit === 0">
-        {{ detailedCourse.type + " 0學分" }}
-      </el-tag>
-      <el-tag
-          :type="selectTypeKey[detailedCourse.type]"
-          size="mini"
-          effect="dark"
-          disable-transitions
-          v-for="v of Array(detailedCourse.credit).keys()"
-          :key="v">
-        {{ detailedCourse.type }}
-      </el-tag>
-      <el-tag
-          type="info"
-          size="large"
-          effect="dark"
-          disable-transitions
-          v-for="v of filterField(detailedCourse)"
-          :key="v">
-        {{ v }}
-      </el-tag>
-    </el-card>
+    <el-link
+        :href="`https://timetable.nctu.edu.tw/?r=main/crsoutline&Acy=109&Sem=1&CrsNo=${detailedCourse.id}&lang=zh-tw`">
+      {{ detailedCourse.cname }}<br/></el-link>
+    <el-tag
+        :type="selectTypeKey[detailedCourse.type]"
+        size="mini"
+        effect="dark"
+        disable-transitions
+        v-show="detailedCourse.credit === 0">
+      {{ detailedCourse.type + " 0學分" }}
+    </el-tag>
+    <el-tag
+        :type="selectTypeKey[detailedCourse.type]"
+        size="mini"
+        effect="dark"
+        disable-transitions
+        v-for="v of Array(detailedCourse.credit).keys()"
+        :key="v">
+      {{ detailedCourse.type }}
+    </el-tag>
+    <br/>
+    <el-tag
+        type="info"
+        size="large"
+        effect="dark"
+        disable-transitions
+        v-for="v of filterField(detailedCourse)"
+        :key="v">
+      {{ v }}
+    </el-tag>
   </el-drawer>
 </template>
 <script>
+import axios from 'axios'
+
 export default {
   name: 'course-detail-drawer',
   computed: {
@@ -50,7 +55,10 @@ export default {
     }
   },
   methods: {
-
+    async getCourseDetail() {
+      let resp = await axios.get(`https://timetable.nctu.edu.tw/?r=main/crsoutline&Acy=109&Sem=1&CrsNo=${this.detailedCourse.id}&lang=zh-tw`)
+      console.log(resp)
+    },
     filterField(course) {
       let showAttr = {
         'teacher': '教授: ',
