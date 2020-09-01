@@ -1,24 +1,26 @@
 <template>
-  <div>
+  <div class="nav-bar">
     <el-row type="flex" class="row-bg" justify="space-between">
-      <el-button icon="el-icon-user-solid" circle> {{this.$store.state.usingCourse}}</el-button>
       <div>
-        <el-button icon="el-icon-bell" circle/>
-        <el-button icon="el-icon-user-solid" @click="showLogin" circle/>
-        請登入
+        <course-group-manager></course-group-manager>
+      </div>
+      <div style="display:flex; justify-content: center;">
+        <message-room/>
+        <user-login-drawer/>
       </div>
     </el-row>
     <el-divider/>
-    <UserLoginDrawer/>
   </div>
 </template>
 
 <script>
 import UserLoginDrawer from "@/components/UserLoginDrawer";
+import CourseGroupManager from "@/components/CourseGroupManager";
+import MessageRoom from "@/components/MessageRoom";
 
 export default {
   name: "TopNavBar",
-  components: {UserLoginDrawer},
+  components: {MessageRoom, CourseGroupManager, UserLoginDrawer},
   data() {
     return {
       showLoginDrawer: false,
@@ -32,3 +34,9 @@ export default {
 }
 </script>
 
+<style>
+.nav-bar{
+  spacing-left: 0px;
+  padding-right: 0px;
+}
+</style>

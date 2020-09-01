@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header>
-      <top-nav-bar></top-nav-bar>
+      <top-nav-bar/>
     </el-header>
     <el-container>
       <el-aside width="30%">
@@ -34,9 +34,5 @@ export default {
 </script>
 
 <style scoped>
-
-body > .el-container {
-  margin-bottom: 40px;
-}
 
 </style>
