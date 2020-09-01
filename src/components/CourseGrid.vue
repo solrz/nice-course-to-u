@@ -1,15 +1,18 @@
 <template>
   <el-card class="course-grid" :body-style="{ padding: '5px' }" style="min-height: 50px">
     <el-tag
+        class="course-tag"
         v-for="course in coursesInGrid"
         closable
         effect="dark"
         :style="{opacity: course.isPreview ? 0.4: 1.0}"
         :type="selectTypeKey(course)"
         :size="courseSize"
-        :key="course.desc + d"
+        :key="course.desc + d + course.isPreview"
         :disable-transitions="true"
-        @close="deleteCourse(course)">{{ course.cname }}
+        @close="updateCourse(course)">
+      <el-icon class="el-icon-info" @click.native="clickCourse(course)"/>{{ course.cname }}
+
     </el-tag>
     <el-autocomplete
         class="input-new-tag"
@@ -20,25 +23,20 @@
         value-key="cname"
         size="mini"
         :fetch-suggestions="queryCourses"
-        @select="onCourseSelected"
-        @blur="inputVisible=false;inputValue=''">
-      <i
-          class="el-icon-edit el-input__icon"
-          slot="suffix">
-      </i>
+        @select="onCourseSelected">
       <template
           class="popover-course" slot-scope="{ item }">
         <el-popover
             placement="left-start"
             trigger="hover"
-            @mouseover.native="courseFilterOption.previewCourse = item">
+            @mouseover.native="$store.state.timetableOptions.previewCourse = item"
+        >
           <el-tag
               effect="dark"
               :type="selectTypeKey(item)"
               :size="courseSize"
               :disable-transitions="true"
-              slot="reference"
-              @click.native="clickCourse(item)">{{ item.cname }}
+              slot="reference">{{ item.cname }}{{item.rawTimeslot}}
           </el-tag>
           <div class="addr">{{ item.dep_cname }}</div>
           <div class="addr">{{ item.teacher }}</div>
@@ -61,6 +59,7 @@
   </el-card>
 </template>
 <script>
+
 export default {
   name: 'course-grid',
   props: {
@@ -70,7 +69,6 @@ export default {
   data() {
     return {
       showCourseInput: false,
-      inputVisible: false,
       inputValue: ''
     }
   },
@@ -83,11 +81,9 @@ export default {
     },
   },
   methods: {
-    addCourse(course) {
-      this.$store.commit('addCourses', course)
-    },
-    deleteCourse(course) {
-      this.$store.commit('addCourses', course)
+    updateCourse(course) {
+      console.log("add course:",course)
+      this.$store.commit('updateCourse', course)
     },
     showInput() {
       this.showCourseInput = true;
@@ -95,13 +91,20 @@ export default {
         this.$refs.saveTagInput.$refs.input.focus();
       });
     },
-
     onCourseSelected(course) {
-      this.$store.getters.courseGroup.addCourse(course)
-      this.showCourseInput = false;
-      this.inputValue = '';
+      this.updateCourse(course);
+      this.$store.state.timetableOptions.previewCourse = null
+      this.$nextTick(() => {
+        this.showCourseInput = false;
+        this.inputValue = '';
+      });
     },
-
+    onBlur() {
+      this.$nextTick(() => {
+        this.showCourseInput = false;
+        this.inputValue = '';
+      });
+    },
     queryCourses(input, handler) {
       let options = this.$store.state.timetableOptions
       let pos = this.d + options.timeslot[this.scope.$index]
