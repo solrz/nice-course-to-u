@@ -4,7 +4,8 @@ import ElementUI from 'element-ui';
 import VueLocalStorage from 'vue-localstorage'
 import Vuex from 'vuex'
 import 'element-ui/lib/theme-chalk/index.css';
-import {remoteGetCourses, defaultCourses} from "@/courseProcessor";
+import {remoteGetCourses, defaultCourses, addCourse} from "@/courseProcessor";
+import {saveSession, ezLoad} from "@/sessionSave";
 
 Vue.prototype.$bus = new Vue();
 
@@ -14,9 +15,10 @@ Vue.use(Vuex)
 const course = new Vuex.Store({
     state: {
         allCourses: null,
-        courseGroups: {'default': defaultCourses()},
-        usingCourse: "default",
-        timetableOptions: {
+        courseGroups: ezLoad('courseGroups') ?? {'default': defaultCourses()},
+        courseGroupsAvailable: ezLoad('courseGroupsAvailable') ?? ['default'],
+        usingCourse: ezLoad('usingCourse') ?? 'default',
+        timetableOptions: ezLoad('timetableOptions') ?? {
             weekday: '12345'.split(''),
             timeslot: 'ABCDEFGHIJK'.split(''),
             allowCrash: true,
@@ -28,9 +30,11 @@ const course = new Vuex.Store({
                 showCourse: null
             }
         },
-        user: {
-            loginInfo: {showLoginDrawer: false}
-        }
+        user: ezLoad('user') ?? {
+            loginInfo: {showLoginDrawer: false, name: 'anonymous', login: false},
+            showCoursesGroupManager: false,
+        },
+        domain: "https://localhost:8080/"
     },
     getters: {
         courseGroup(state) {
