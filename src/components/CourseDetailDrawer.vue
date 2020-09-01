@@ -5,9 +5,12 @@
       type="primary"
       @open="getCourseDetail"
       :visible.sync="courseFilterOption.courseDetail.showDetail">
+    <h2>{{ detailedCourse.cname }}</h2><br/>
     <el-link
         :href="`https://timetable.nctu.edu.tw/?r=main/crsoutline&Acy=109&Sem=1&CrsNo=${detailedCourse.id}&lang=zh-tw`">
-      {{ detailedCourse.cname }}<br/></el-link>
+      前往查看課程詳細資料
+    </el-link>
+    <br>
     <el-tag
         :type="selectTypeKey[detailedCourse.type]"
         size="mini"
@@ -38,7 +41,7 @@
   </el-drawer>
 </template>
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 
 export default {
   name: 'course-detail-drawer',
@@ -56,8 +59,9 @@ export default {
   },
   methods: {
     async getCourseDetail() {
-      let resp = await axios.get(`https://timetable.nctu.edu.tw/?r=main/crsoutline&Acy=109&Sem=1&CrsNo=${this.detailedCourse.id}&lang=zh-tw`)
-      console.log(resp)
+      return ""
+      // let resp = await axios.get(`https://timetable.nctu.edu.tw/?r=main/crsoutline&Acy=109&Sem=1&CrsNo=${this.detailedCourse.id}&lang=zh-tw`)
+      // console.log(resp)
     },
     filterField(course) {
       let showAttr = {
