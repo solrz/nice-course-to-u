@@ -5,24 +5,7 @@ export function defaultCourses() {
         list: [],
         scheduleSlots: newCourseSlots(() => []),
         slotsFilled: newCourseSlots(() => false),
-        addCourse(course) {
-            if (!course) return;
-            let courseAddedBefore = this.list.includes(course)
-            if (!courseAddedBefore) {
-                this.list.push(course)
-                course.timeSchedules.forEach((t) => this.scheduleSlots[t].push(course))
-                course.timeSchedules.forEach((t) => this.slotsFilled[t] = true)
-            } else {
-                let courseIndex = this.list.indexOf(course)
-                this.list.splice(courseIndex, 1)
-                for(let slot of course.timeSchedules){
-                    this.scheduleSlots[slot].splice(course)
-                    if(this.scheduleSlots[slot].length === 0){
-                        this.slotsFilled[slot] = false
-                    }
-                }
-            }
-        },
+        listID : []
     }
 }
 
@@ -153,4 +136,28 @@ export async function remoteGetCourses() {
     }
     console.log("Loaded courses", Object.keys(newAllCourses).length, newAllCourses)
     return newAllCourses
+}
+
+export function addCourse(courseGroup, course) {
+    if (!course) return courseGroup;
+    let courseAddedBefore = courseGroup.listID.includes(course.id)
+    if (!courseAddedBefore) {
+        courseGroup.list.push(course)
+        courseGroup.listID.push(course.id)
+        course.timeSchedules.forEach((t) => courseGroup.scheduleSlots[t].push(course))
+        course.timeSchedules.forEach((t) => courseGroup.slotsFilled[t] = true)
+    } else {
+        console.log(courseGroup, course)
+        let courseIndex = courseGroup.list.indexOf(course)
+        courseGroup.list.splice(courseIndex, 1)
+        let courseIDIndex = courseGroup.listID.indexOf(course.id)
+        courseGroup.listID.splice(courseIDIndex, 1)
+        for(let slot of course.timeSchedules){
+            courseGroup.scheduleSlots[slot].splice(course)
+            if(courseGroup.scheduleSlots[slot].length === 0){
+                courseGroup.slotsFilled[slot] = false
+            }
+        }
+    }
+    return courseGroup
 }
