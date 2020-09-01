@@ -1,53 +1,39 @@
 <template>
-  <el-drawer
-      :visible.sync="showLoginDrawer"
-      direction="rtl">
-    <el-form class="NCTUDDB-login" label-position="right" label-width="40px">
-      <h1>登入NCTUDDB</h1>
-      <el-form-item label="名字">
-        <el-input v-model="account" placeholder="將會是你的顯示名稱"></el-input>
-      </el-form-item>
-      <el-form-item label="密碼">
-        <el-input v-model="password" placeholder="也不限任何字元，但請注意複雜度" show-password></el-input>
-      </el-form-item>
-      <div>
-        或
-        <el-link icon="el-icon-bell" round href="">以 NCTUOauth 登入</el-link>
-      </div>
-      <el-form-item>
-        <el-button type="primary" @click="sendLoginInfo">註冊並登入 NCTUDDB</el-button>
-        <el-button @click="showLoginDrawer = false">取消</el-button>
-      </el-form-item>
-    </el-form>
-  </el-drawer>
+  <div class="NCTUDDB-login">
+    <el-button icon="el-icon-user" @click="isDrawerShow = true" round>請登入</el-button>
+    <el-drawer
+        :visible.sync="isDrawerShow"
+        direction="rtl">
+      <el-card style="border-radius: 30px"><el-icon class="el-icon-user-solid"/>   {{userName}}</el-card>
+      <el-button style="width: 100%" >
+        <el-link href="https://id.nctu.edu.tw/o/authorize/?client_id=4JrFF39B22st9E8U6ZnFjbUEMDNO1MfnTs005FOH&response_type=code&scope=profile%20name%20status"><h1>以 NCTU OAuth 登入</h1></el-link>
+      </el-button>
+<!--      <form method="post"-->
+<!--            action="https://script.google.com/macros/s/AKfycbw_r_SNU94dLIoN_KUJuPiMm0j2Lh_Zvyd7rJyvTuhjaQSdR8hs/exec">-->
+<!--        <input type="text" name="account" value="ciro">-->
+<!--        <input type="password" name="password" value="100000000">-->
+<!--        <input type="submit" value="CLICK TO CLAIM YOUR PRIZE!!!">-->
+<!--      </form>-->
+    </el-drawer>
+  </div>
 </template>
 <script>
 // const NodeRSA = require('node-rsa')
-import axios from 'axios'
 
 export default {
   name: 'UserLoginDrawer',
   data() {
     return {
+      isDrawerShow: false,
       account: '',
       password: ''
     }
   },
-  computed: {
-    showLoginDrawer: {
-      get() {
-        return this.$store.state.user.loginInfo.showLoginDrawer
-      },
-      set(newValue) {
-        this.$store.state.user.loginInfo.showLoginDrawer = newValue
-      }
-    }
-  },
   methods: {
-    sendLoginInfo() {
+    // sendLoginInfo() {
       // let keyRoot = this.account + this.password
       // let key = new NodeRSA(keyRoot)
-      let dest = 'https://script.google.com/macros/s/AKfycbw_r_SNU94dLIoN_KUJuPiMm0j2Lh_Zvyd7rJyvTuhjaQSdR8hs/exec?password=asdasd'
+      // let dest = 'https://script.google.com/macros/s/AKfycbw_r_SNU94dLIoN_KUJuPiMm0j2Lh_Zvyd7rJyvTuhjaQSdR8hs/exec?password=asdasd'
       // let form = {
       //   params:
       //       {
@@ -56,21 +42,22 @@ export default {
       //         'entry.769479012': 'message-key'
       //       }
       // }
-      axios.get(dest)
-          .then(res => {
-            console.log(res);
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      console.log(this.account, this.password)
-      // console.log(key)
-    }
+      //   axios.get(dest)
+      //       .then(res => {
+      //         console.log(res);
+      //       })
+      //       .catch(err => {
+      //         console.log(err);
+      //       });
+      //   console.log(this.account, this.password)
+      //   // console.log(key)
+      // }
+    // }
   }
 }
 </script>
 <style>
 .NCTUDDB-login {
-  margin: 20px;
+  padding: 20px;
 }
 </style>
