@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card class="course-grid" :body-style="{ padding: '5px' }" style="min-height: 50px">
     <el-tag
         v-for="course in coursesInGrid"
         closable
@@ -54,6 +54,7 @@
         v-show="courseFilterOption.allowCrash || coursesInGrid.length === 0"
         class="button-new-tag"
         size="mini"
+        :body-style="{ padding: '5px' }"
         @click="showInput">+
     </el-button>
 
@@ -142,23 +143,31 @@ export default {
 }
 </script>
 <style>
+.course-grid{
+  height: 80px;
+}
 .popover-course{
   width: 300px
 }
 
-.el-tag + .el-tag {
+.course-tag {
   margin-left: 0px;
+  margin-right: 0px;
 }
 
 .button-new-tag{
   margin-left: 10px;
-  height: 20px;
-  line-height: 0px;
+  margin-right: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 24px;
+  vertical-align: bottom;
 }
 
 .input-new-tag{
   font-size: 8px;
   margin-left: 10px;
+  margin-right: 10px;
   vertical-align: bottom;
   width: 100%;
 }
