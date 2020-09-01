@@ -67,21 +67,24 @@ const course = new Vuex.Store({
                     type: 'success'
                 });
             } else {
-                console.log(allCourses)
+                // console.log(allCourses)
                 console.log("Loaded courses from local")
             }
             state.allCourses = allCourses
-            console.log(Object.keys(state.allCourses))
+            // console.log(Object.keys(state.allCourses))
         },
-        addCourses(state, course) {
-            let group = state.courseGroups[state.usingCourse]
-            group.addCourse(course)
+        updateCourse(state, course) {
+            console.log("Adding course")
+            state.timetableOptions.previewCourse = null
+            let group = Object.assign({}, state.courseGroups[state.usingCourse])
+            group = addCourse(group, course)
             state.courseGroups[state.usingCourse] = group
+            saveSession(state)
             console.log(group)
         },
-        async loadSharedCourses(state, rawCoursesID){
-            let forceReload = false
-            let coursesID = rawCoursesID.replace(' ','').split(',')
+        async loadSharedCourses(state, params) {
+            let rawCoursesID = params.importCoursesID ?? ""
+            let coursesID = rawCoursesID.replace(' ', '').split(',')
             try {
                 var allCourses =
                     JSON.parse(localStorage.getItem('allCourses'))
@@ -89,17 +92,25 @@ const course = new Vuex.Store({
                 console.log(e)
                 // return
             }
-            if (forceReload || !allCourses) {
+            if (!allCourses) {
                 allCourses = await remoteGetCourses()
             }
-            let importCourseGroup = 'imported'
+            let importCourseGroup = params.importCourseGroupName ?? "imported"
             state.allCourses = allCourses
             state.usingCourse = importCourseGroup
-            if(!state.courseGroups[importCourseGroup]){
+            if (!state.courseGroups[importCourseGroup]) {
+                state.courseGroupsAvailable.push(importCourseGroup)
                 state.courseGroups[importCourseGroup] = defaultCourses()
             }
-            for(let id of coursesID){
-                state.courseGroups[importCourseGroup].addCourse(allCourses[id])
+            for (let id of coursesID) {
+                if(id){
+                    if(id.length !== 0){
+                        let courses = state.courseGroups[importCourseGroup].list
+                        if(!Object.values(courses).map((v)=>v.id).includes(id)) {
+                            state.courseGroups[importCourseGroup] = addCourse(state.courseGroups[importCourseGroup], allCourses[id])
+                        }
+                    }
+                }
             }
         }
     }
