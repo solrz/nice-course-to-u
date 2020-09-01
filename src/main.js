@@ -112,7 +112,20 @@ const course = new Vuex.Store({
                     }
                 }
             }
-        }
+            saveSession(state)
+
+        },
+        switchCourseGroup(state, groupName) {
+            state.usingCourse = groupName
+            if (!state.courseGroupsAvailable.includes(groupName)) {
+                state.courseGroupsAvailable.push(groupName)
+            }
+            if (!state.courseGroups[groupName]) {
+                state.courseGroups[groupName] = defaultCourses()
+            }
+            console.log("New Course Group Generated:", groupName)
+            saveSession(state)
+        },
     }
 })
 Vue.config.productionTip = false
@@ -129,7 +142,11 @@ Vue.mixin({
         },
         courseFilterOption() {
             return this.$store.state.timetableOptions
+        },
+        userName() {
+            return this.$store.state.user.loginInfo.name
         }
+
     },
 })
 new Vue({
