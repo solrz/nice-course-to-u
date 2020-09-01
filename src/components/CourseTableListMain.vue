@@ -3,8 +3,8 @@
       :highlight-current-row="true"
       :data="presentCourses"
       empty-text="無課程"
-      height="600"
-      style="width: 100%"
+      max-height="800"
+      style="width: 90%"
       @cell-mouse-enter="hoverOnCourse"
       @mouseleave="leaveCourse"
       @row-click="clickCourse"
@@ -15,7 +15,8 @@
     >
       <template slot-scope="scope">
         <div>
-          <h3>{{ scope.row.cname }}</h3>
+          <span style="display:flex; justify-content: left;">
+          <a style="text-size: 20px; font-weight: bolder">{{ scope.row.cname }}</a>
           <el-tag
               :type="selectTypeKey[scope.row.type]"
               size="mini"
@@ -33,6 +34,7 @@
               :key="v">
             {{ scope.row.type[0] }}
           </el-tag>
+          </span>
         </div>
         <el-tag
             type="info"
@@ -43,6 +45,8 @@
             :key="v">
           {{ v }}
         </el-tag>
+        <br>
+        <a style="text-size: 20px; font-weight: bolder">{{ scope.row.memo }}</a>
       </template>
     </el-table-column>
   </el-table>
@@ -53,7 +57,7 @@ export default {
   props: {
     selectTypeKey: {}
   },
-  computed:{
+  computed: {
     presentCourses() {
       let courses = this.courseFilterOption.showOnlySelected ? this.coursesGroup.list : this.allCoursesList
       let search = this.searchString
@@ -65,33 +69,33 @@ export default {
       return courses
     }
   },
-  methods:{
-    hoverOnCourse(row){
+  methods: {
+    hoverOnCourse(row) {
       this.courseFilterOption.previewCourse = row
     },
-    leaveCourse(){
+    leaveCourse() {
       this.courseFilterOption.previewCourse = null
     },
     filterField(course) {
       let showAttr = {
         'teacher': '教授: ',
         'dep_cname': '系所: ',
-        'memo': '',
         'reg_num': '登記人數: ',
-        'time': '時段: ',
-        'id': '課號: '
+        'rawTimeslot': '時段: ',
+        'id': '課號: ',
+        // 'memo': '',
       }
       let displayCourse = []
-      for(let attr in showAttr){
+      for (let attr in showAttr) {
         let value = course[attr]
-        if (value){
+        if (value) {
           displayCourse.push(`${showAttr[attr]} ${course[attr]}`)
         }
       }
       // console.log(Object.keys(course), Object.values(course));
       return displayCourse
     },
-    clickCourse(course){
+    clickCourse(course) {
       console.log("Clicked course:", course.cname)
       this.courseFilterOption.courseDetail.showDetail = true
       this.courseFilterOption.courseDetail.showCourse = course
