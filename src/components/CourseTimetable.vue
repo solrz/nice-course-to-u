@@ -1,22 +1,27 @@
 <template>
-  <el-table
-      :data="coursesForTable"
-      style="width: 100%">
-    <el-table-column
-        type="index"
-        :index="(index) => courseFilterOption.timeslot[index]">
-    </el-table-column>
-    <el-table-column
-        v-for="d of courseFilterOption.weekday"
-        :key="d"
-        :label="d"
-        :prop="d">
-      <template slot-scope="scope">
-        <course-grid :d="d" :scope="scope"/>
-      </template>
+  <el-card :body-style="{ padding: '0px' }"
+           style="width: 100%">
+    <el-table
+        :data="coursesForTable"
+        style="width: 100%">
+      <el-table-column
+          type="index"
+          :index="(index) => courseFilterOption.timeslot[index]">
+      </el-table-column>
+      <el-table-column
+          v-for="d of courseFilterOption.weekday"
+          :key="d"
+          :label="d"
+          :prop="d">
+        <template slot-scope="scope">
+          <course-grid :d="d" :scope="scope"/>
+        </template>
 
-    </el-table-column>
-  </el-table>
+      </el-table-column>
+
+    </el-table>
+
+  </el-card>
 </template>
 <script>
 
@@ -27,7 +32,7 @@ export default {
   components: {CourseGrid},
   computed: {
     coursesForTable() {
-      let coursesSlot = this.$store.getters.courseGroup.scheduleSlots
+      let coursesSlot = this.$store.state.courseGroups[this.$store.state.usingCourse].scheduleSlots
       let days = this.courseFilterOption.weekday
       let slots = this.courseFilterOption.timeslot
       let convertedCourses = []
