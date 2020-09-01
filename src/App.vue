@@ -14,15 +14,22 @@ export default {
   created() {
     this.$store.commit('loadCourses')
     let params = getUrlVars()
-    console.log(params)
-    if(params['importedCoursesID']){
-      this.$store.commit('loadSharedCourses', params['importedCoursesID'])
+    // if(Object.keys(params).length !==0){
+    //   this.$notify({
+    //     title: '成功',
+    //     message: JSON.stringify(params),
+    //     type: 'success'
+    //   });
+    // }
+    console.log("Read params:", params)
+    if(params['importCoursesID']){
+      this.$notify({
+        title: '正在載入某人的課程',
+        message: '小等一下...',
+        type: 'info'
+      });
+      this.$store.commit('loadSharedCourses', params)
     }
-    this.$notify({
-      title: '成功',
-      message: JSON.stringify(params),
-      type: 'success'
-    });
   }
 }
 </script>
@@ -34,6 +41,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 10px;
+  height: 100%
 }
 </style>
